@@ -2,7 +2,7 @@ import sqlite3
 
 def init_db():
     # Conexión a la base de datos
-    conn = sqlite3.connect('colegio.db')
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     # Crear la tabla de estudiantes
