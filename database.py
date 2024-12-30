@@ -14,12 +14,13 @@ def init_db():
         apellido TEXT NOT NULL,
         fecha_nacimiento DATE NOT NULL,
         grado TEXT NOT NULL,
-        correo TEXT,
-        telefono TEXT,
-        direccion TEXT,
         genero TEXT,
         fecha_inscripcion DATE NOT NULL,
-        estado TEXT NOT NULL
+        estado TEXT NOT NULL,
+        nombre_acudiente TEXT NOT NULL,
+        telefono_acudiente TEXT,
+        correo_acudiente TEXT,
+        direccion_acudiente TEXT
     );
     ''')
 

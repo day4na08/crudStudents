@@ -5,64 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Estudiante</title>
     <style>
+        /* Estilos básicos del cuerpo */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #f8f9fa, #e9ecef);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
+
+        /* Contenedor principal */
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 400px;
-            animation: fadeIn 1s ease-in-out;
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
         }
+
+        /* Título del formulario */
         h1 {
+            font-size: 22px;
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
         }
+
+        /* Etiquetas de los inputs */
         label {
-            display: block;
-            margin-bottom: 8px;
+            font-size: 14px;
             color: #555;
+            margin-bottom: 6px;
+            display: block;
         }
+
+        /* Inputs y selectores */
         input[type="text"], input[type="email"], input[type="date"], input[type="tel"], select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f8f9fa;
         }
+
+        /* Botón principal */
         button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #ffffff;
+            padding: 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 16px;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+
+        /* Botón "Volver al Inicio" */
+        .btn-back {
+            background-color: transparent;
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: #0056b3;
+        }
+
+        /* Barra de desplazamiento visible solo cuando es necesario */
+        .container {
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
+    <a href="{{ url_for('index') }}" class="btn-back">← Volver al Inicio</a>
     <div class="container">
         <h1>Editar Estudiante</h1>
         <form action="{{ url_for('editar', id=estudiante.id) }}" method="POST">
@@ -76,16 +106,12 @@
             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ estudiante.fecha_nacimiento }}" required>
 
             <label for="grado">Grado:</label>
-            <input type="text" id="grado" name="grado" value="{{ estudiante.grado }}" required>
-
-            <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" value="{{ estudiante.correo }}" required>
-
-            <label for="telefono">Teléfono:</label>
-            <input type="tel" id="telefono" name="telefono" value="{{ estudiante.telefono }}" required>
-
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" value="{{ estudiante.direccion }}" required>
+            <select id="grado" name="grado" required>
+                <!-- Opciones del grado -->
+                {% for grado in ['Preescolar', 'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto', 'Séptimo', 'Octavo', 'Noveno', 'Décimo', 'Undécimo'] %}
+                <option value="{{ grado }}" {% if estudiante.grado == grado %}selected{% endif %}>{{ grado }}</option>
+                {% endfor %}
+            </select>
 
             <label for="genero">Género:</label>
             <select id="genero" name="genero" required>
@@ -102,6 +128,18 @@
                 <option value="Activo" {% if estudiante.estado == 'Activo' %}selected{% endif %}>Activo</option>
                 <option value="Inactivo" {% if estudiante.estado == 'Inactivo' %}selected{% endif %}>Inactivo</option>
             </select>
+
+            <label for="nombre_acudiente">Nombre del Acudiente:</label>
+            <input type="text" id="nombre_acudiente" name="nombre_acudiente" value="{{ estudiante.nombre_acudiente }}" required>
+
+            <label for="telefono_acudiente">Teléfono del Acudiente:</label>
+            <input type="tel" id="telefono_acudiente" name="telefono_acudiente" value="{{ estudiante.telefono_acudiente }}" required>
+
+            <label for="correo_acudiente">Correo del Acudiente:</label>
+            <input type="email" id="correo_acudiente" name="correo_acudiente" value="{{ estudiante.correo_acudiente }}" required>
+
+            <label for="direccion_acudiente">Dirección del Acudiente:</label>
+            <input type="text" id="direccion_acudiente" name="direccion_acudiente" value="{{ estudiante.direccion_acudiente }}">
 
             <button type="submit">Guardar Cambios</button>
         </form>

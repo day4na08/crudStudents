@@ -6,51 +6,98 @@
     <title>Registrar Estudiante</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5, #e0e4e8);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            animation: backgroundFade 3s infinite alternate;
+        }
+        @keyframes backgroundFade {
+            from {
+                background-color: #f0f2f5;
+            }
+            to {
+                background-color: #e0e4e8;
+            }
         }
         .container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             width: 400px;
+            height: 80vh; /* Altura fija */
+            overflow-y: auto; /* Barra de desplazamiento vertical */
             animation: fadeIn 1s ease-in-out;
+            position: relative;
+        }
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ff6b6b, #f0e130, #4caf50, #524ff8);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.7;
+            border-radius: 10px;
+            animation: gradientMove 5s infinite alternate;
+        }
+        @keyframes gradientMove {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.05);
+            }
         }
         h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            animation: slideIn 1s ease-in-out;
         }
         label {
             display: block;
             margin-bottom: 8px;
             color: #555;
+            font-size: 14px;
+            animation: slideIn 1s ease-in-out;
         }
         input[type="text"], input[type="email"], input[type="date"], input[type="tel"], select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 14px;
+            animation: slideIn 1s ease-in-out;
+        }
+        input::placeholder {
+            color: #aaa;
         }
         button {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: slideIn 1s ease-in-out;
         }
         button:hover {
             background-color: #45a049;
+            transform: scale(1.05);
         }
         @keyframes fadeIn {
             from {
@@ -60,32 +107,69 @@
                 opacity: 1;
             }
         }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Establecer la fecha actual en el campo "Fecha de Inscripción"
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha_inscripcion').value = today;
+
+            // Validar que solo se ingresen letras en los campos "Nombre", "Apellido" y "Nombre del Acudiente"
+            document.getElementById('nombre').addEventListener('input', function (e) {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+            document.getElementById('apellido').addEventListener('input', function (e) {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+            document.getElementById('nombre_acudiente').addEventListener('input', function (e) {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+
+            // Validar que solo se ingresen números en el campo "Teléfono del Acudiente"
+            document.getElementById('telefono_acudiente').addEventListener('input', function (e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Registrar Estudiante</h1>
         <form action="{{ url_for('crear') }}" method="POST">
             <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan" required>
 
             <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" required>
+            <input type="text" id="apellido" name="apellido" placeholder="Ej: Pérez" required>
 
             <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
 
             <label for="grado">Grado:</label>
-            <input type="text" id="grado" name="grado" required>
-
-            <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" required>
-
-            <label for="telefono">Teléfono:</label>
-            <input type="tel" id="telefono" name="telefono" required>
-
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" required>
+            <select id="grado" name="grado" required>
+                <option value="Preescolar">Preescolar</option>
+                <option value="Primero">Primero</option>
+                <option value="Segundo">Segundo</option>
+                <option value="Tercero">Tercero</option>
+                <option value="Cuarto">Cuarto</option>
+                <option value="Quinto">Quinto</option>
+                <option value="Sexto">Sexto</option>
+                <option value="Séptimo">Séptimo</option>
+                <option value="Octavo">Octavo</option>
+                <option value="Noveno">Noveno</option>
+                <option value="Décimo">Décimo</option>
+                <option value="Undécimo">Undécimo</option>
+            </select>
 
             <label for="genero">Género:</label>
             <select id="genero" name="genero" required>
@@ -102,6 +186,18 @@
                 <option value="Activo">Activo</option>
                 <option value="Inactivo">Inactivo</option>
             </select>
+
+            <label for="nombre_acudiente">Nombre del Acudiente:</label>
+            <input type="text" id="nombre_acudiente" name="nombre_acudiente" placeholder="Ej: María López" required>
+
+            <label for="telefono_acudiente">Teléfono del Acudiente:</label>
+            <input type="tel" id="telefono_acudiente" name="telefono_acudiente" placeholder="Ej: 1234567890">
+
+            <label for="correo_acudiente">Correo del Acudiente:</label>
+            <input type="email" id="correo_acudiente" name="correo_acudiente" placeholder="noaplica@noaplica.com">
+
+            <label for="direccion_acudiente">Dirección del Acudiente:</label>
+            <input type="text" id="direccion_acudiente" name="direccion_acudiente" placeholder="Ej: Calle 123, Ciudad">
 
             <button type="submit">Registrar</button>
         </form>

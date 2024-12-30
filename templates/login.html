@@ -6,62 +6,132 @@
     <title>Login</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5, #e0e4e8);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            animation: backgroundFade 3s infinite alternate;
+        }
+        @keyframes backgroundFade {
+            from {
+                background-color: #f0f2f5;
+            }
+            to {
+                background-color: #e0e4e8;
+            }
         }
         .container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
             text-align: center;
             animation: fadeIn 1s ease-in-out;
+            position: relative;
+        }
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #ff6b6b, #524ff8);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.7;
+            border-radius: 10px;
+            animation: gradientMove 5s infinite alternate;
+        }
+        @keyframes gradientMove {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.05);
+            }
         }
         h1 {
             color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            animation: slideIn 1s ease-in-out;
         }
         label {
             display: block;
             margin-bottom: 8px;
             color: #555;
+            font-size: 14px;
+            animation: slideIn 1s ease-in-out;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 14px;
+            animation: slideIn 1s ease-in-out;
+        }
+        .password-container {
+            position: relative;
+            width: 100%;
+            animation: slideIn 1s ease-in-out;
+        }
+        .password-container input {
+            padding-right: 40px;
+        }
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 14px;
+            color: #524ff8;
         }
         button {
             background-color: #524ff8;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: slideIn 1s ease-in-out;
         }
         button:hover {
-            background-color: #524ff8;
+            background-color: #3e3bb8;
+            transform: scale(1.05);
         }
         .flash-message {
             color: #d9534f;
             font-weight: bold;
             margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
         }
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
             to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
                 opacity: 1;
             }
         }
@@ -75,7 +145,10 @@
             <input type="text" id="username" name="username" required>
 
             <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
+            <div class="password-container">
+                <input type="password" id="password" name="password" required>
+                <span class="password-toggle" onclick="togglePassword()">Mostrar</span>
+            </div>
 
             <button type="submit">Iniciar Sesión</button>
         </form>
@@ -89,5 +162,18 @@
             {% endif %}
         {% endwith %}
     </div>
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById('password');
+            var passwordToggle = document.querySelector('.password-toggle');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.textContent = 'Ocultar';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.textContent = 'Mostrar';
+            }
+        }
+    </script>
 </body>
 </html>

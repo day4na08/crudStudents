@@ -6,45 +6,92 @@
     <title>Estudiantes</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e0e4e8, #f0f2f5);
             margin: 0;
-            padding: 20px;
+            padding: 20px; /* Aumentado el padding */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Cambiado de center a flex-start */
+            min-height: 100vh; /* Asegura que el contenedor esté dentro de la vista */
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1200px; /* Aumentado el max-width */
+            width: 100%;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px; /* Aumentado el padding */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1s ease-in-out;
+            margin-top: 20px; /* Aumentado el margen superior */
         }
         h1, h2 {
             color: #333;
+            text-align: center;
+            margin: 0 0 20px 0; /* Aumentado el margen inferior */
         }
-        a {
-            color: #4CAF50;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px; /* Aumentado el margen inferior */
+            margin-top: 20px; /* Añadido margen superior */
+        }
+        .header a {
+            color: #fff;
             text-decoration: none;
-            margin-right: 10px;
+            padding: 4px 8px; /* Mantener el padding reducido */
+            border-radius: 5px;
+            background-color: #15304d;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        a:hover {
-            text-decoration: underline;
+        .header a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .btn {
+            display: inline-block;
+            padding: 4px 8px; /* Mantener el padding reducido */
+            margin: 10px 0; /* Aumentado el margen */
+            background-color: #15304d;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #2d6096;
+            transform: scale(1.05);
+        }
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px; /* Aumentado el margen inferior */
+            gap: 10px; /* Aumentado el gap */
+        }
+        .filters input, .filters select {
+            padding: 2px; /* Mantener el padding reducido */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px; /* Mantener el tamaño de la fuente reducido */
+            width: 30%;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 20px; /* Aumentado el margen superior */
         }
         table, th, td {
             border: 1px solid #ddd;
         }
         th, td {
-            padding: 12px;
+            padding: 6px; /* Mantener el padding reducido */
             text-align: left;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #15304d;
+            color: white;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -53,11 +100,49 @@
             background-color: #f1f1f1;
         }
         .actions a {
-            color: #007BFF;
-            margin-right: 10px;
+            color: #2d6096;
+            margin-right: 10px; /* Aumentado el margen */
+            transition: color 0.3s ease;
         }
         .actions a:hover {
-            text-decoration: underline;
+            color: #0056b3;
+        }
+        .logout {
+            display: inline-block;
+            padding: 4px 8px; /* Mantener el padding reducido */
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .logout:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px; /* Aumentado el margen superior */
+        }
+        .pagination a {
+            color: #15304d;
+            padding: 4px 8px; /* Mantener el padding reducido */
+            text-decoration: none;
+            border: 1px solid #ddd;
+            margin: 0 5px; /* Aumentado el margen */
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .pagination a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .pagination .active {
+            background-color: #15304d;
+            color: white;
+            border: 1px solid #15304d;
         }
         @keyframes fadeIn {
             from {
@@ -71,11 +156,34 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bienvenido(a), {{ current_user.username }}</h1>
-        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+        <div class="header">
+            <h1>Bienvenido(a), {{ current_user.username }}</h1>
+            <a href="{{ url_for('logout') }}" class="logout">Cerrar sesión</a>
+        </div>
 
         <h2>Estudiantes</h2>
-        <a href="{{ url_for('crear') }}">Registrar nuevo estudiante</a>
+        <a href="{{ url_for('crear') }}" class="btn">Registrar nuevo estudiante</a>
+
+        <form method="GET" action="{{ url_for('index') }}" class="filters">
+            <input type="text" name="nombre" placeholder="Nombre" value="{{ request.args.get('nombre', '') }}">
+            <input type="text" name="apellido" placeholder="Apellido" value="{{ request.args.get('apellido', '') }}">
+            <select name="grado">
+                <option value="">Todos los grados</option>
+                <option value="Preescolar" {% if request.args.get('grado') == 'Preescolar' %}selected{% endif %}>Preescolar</option>
+                <option value="Primero" {% if request.args.get('grado') == 'Primero' %}selected{% endif %}>Primero</option>
+                <option value="Segundo" {% if request.args.get('grado') == 'Segundo' %}selected{% endif %}>Segundo</option>
+                <option value="Tercero" {% if request.args.get('grado') == 'Tercero' %}selected{% endif %}>Tercero</option>
+                <option value="Cuarto" {% if request.args.get('grado') == 'Cuarto' %}selected{% endif %}>Cuarto</option>
+                <option value="Quinto" {% if request.args.get('grado') == 'Quinto' %}selected{% endif %}>Quinto</option>
+                <option value="Sexto" {% if request.args.get('grado') == 'Sexto' %}selected{% endif %}>Sexto</option>
+                <option value="Séptimo" {% if request.args.get('grado') == 'Séptimo' %}selected{% endif %}>Séptimo</option>
+                <option value="Octavo" {% if request.args.get('grado') == 'Octavo' %}selected{% endif %}>Octavo</option>
+                <option value="Noveno" {% if request.args.get('grado') == 'Noveno' %}selected{% endif %}>Noveno</option>
+                <option value="Décimo" {% if request.args.get('grado') == 'Décimo' %}selected{% endif %}>Décimo</option>
+                <option value="Undécimo" {% if request.args.get('grado') == 'Undécimo' %}selected{% endif %}>Undécimo</option>
+            </select>
+            <button type="submit" class="btn">Filtrar</button>
+        </form>
 
         <table>
             <thead>
@@ -94,12 +202,24 @@
                     <td>{{ estudiante.grado }}</td>
                     <td class="actions">
                         <a href="{{ url_for('editar', id=estudiante.id) }}">Editar</a>
-                        <a href="{{ url_for('eliminar', id=estudiante.id) }}">Eliminar</a>
+                        <a href="{{ url_for('eliminar', id=estudiante.id) }}" onclick="return confirm('¿Estás seguro de que deseas eliminar este estudiante?');">Eliminar</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('index', page=page-1, nombre=request.args.get('nombre'), apellido=request.args.get('apellido'), grado=request.args.get('grado')) }}">&laquo; Anterior</a>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) %}
+                <a href="{{ url_for('index', page=p, nombre=request.args.get('nombre'), apellido=request.args.get('apellido'), grado=request.args.get('grado')) }}" class="{% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+            {% if page < total_pages %}
+                <a href="{{ url_for('index', page=page+1, nombre=request.args.get('nombre'), apellido=request.args.get('apellido'), grado=request.args.get('grado')) }}">Siguiente &raquo;</a>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
